@@ -3,7 +3,8 @@ package raidline.pt.handler
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.server.response.respond
+import raidline.pt.exceptions.CustomerBadRequestException
 import raidline.pt.logger.logRequest
 import raidline.pt.model.Customer
 import raidline.pt.repo.CustomerRepositoryImpl
@@ -20,7 +21,7 @@ class CustomerRouterHandler(private val customerRepository: CustomerRepositoryIm
         val response = customerRepository.getAllCustomers()
 
         if(response.isEmpty()) {
-            call.respond(status = HttpStatusCode.NotFound, "There are no customers at this point in time")
+            call.respond(HttpStatusCode.NotFound)
             return
         }
 
@@ -63,5 +64,5 @@ class CustomerRouterHandler(private val customerRepository: CustomerRepositoryIm
     }
 
     private fun Parameters.getCustomerId(): Int =
-        this[CUSTOMER_ID_PARAM]?.toIntOrNull() ?: throw IllegalArgumentException("There is no customer id param found")
+        this[CUSTOMER_ID_PARAM]?.toIntOrNull() ?: throw CustomerBadRequestException("There is no customer id param found")
 }
