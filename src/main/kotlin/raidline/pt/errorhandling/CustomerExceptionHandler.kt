@@ -2,7 +2,6 @@ package raidline.pt.errorhandling
 
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import raidline.pt.errorhandling.response.CustomerErrorResponse
