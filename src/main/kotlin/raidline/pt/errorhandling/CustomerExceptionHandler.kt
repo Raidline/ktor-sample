@@ -13,29 +13,35 @@ import raidline.pt.logger.logger
 
 
 fun StatusPagesConfig.setup() {
-    exception<Exception> { call, exception -> exception.handleCustomerException(call).also { call.logger().info("CAME FROM STATUS PAGE") } }
+    exception<Exception> { call, exception ->
+        exception.handleCustomerException(call).also { call.logger().info("CAME FROM STATUS PAGE") }
+    }
 }
 
 
-suspend fun Exception.handleCustomerException(call : ApplicationCall) =
-    when(this) {
+suspend fun Exception.handleCustomerException(call: ApplicationCall) =
+    when (this) {
         is CustomerInternalException -> {
             call.respond(this.code, this.convertExceptionToError()).also {
                 call.logger().error("There was an internal error in the application")
             }
         }
+
         is CustomerNotFoundException -> {
             call.respond(this.code, this.convertExceptionToError()).also {
                 call.logger().warn("The wanted resource could not be found")
             }
         }
+
         is CustomerBadRequestException -> {
             call.respond(this.code, this.convertExceptionToError()).also {
                 call.logger().warn("User sent a bad request")
             }
         }
+
         else -> call.respond(HttpStatusCode.InternalServerError, "Unknown error")
     }
 
 
-private fun <T : CustomerBaseException> T.convertExceptionToError() = CustomerErrorResponse(this.message, this.code.value)
+private fun <T : CustomerBaseException> T.convertExceptionToError() =
+    CustomerErrorResponse(this.message, this.code.value)

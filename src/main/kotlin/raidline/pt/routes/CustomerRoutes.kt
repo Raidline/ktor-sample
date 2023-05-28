@@ -10,7 +10,7 @@ fun Route.customerRouting(routerHandler: CustomerRouterHandler) {
         get {
             routerHandler.handleGetAll(call)
         }
-        get("{id?}") {
+        get("{id}") {
             routerHandler.handleGetSingleCustomer(call)
         }
 

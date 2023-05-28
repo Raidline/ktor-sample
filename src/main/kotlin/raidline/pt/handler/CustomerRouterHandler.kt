@@ -56,5 +56,6 @@ class CustomerRouterHandler(private val customerRepository: CustomerRepositoryIm
     }
 
     private fun Parameters.getCustomerId(): Int =
-        this[CUSTOMER_ID_PARAM]?.toIntOrNull() ?: throw CustomerBadRequestException("There is no customer id param found")
+        this[CUSTOMER_ID_PARAM]?.toIntOrNull()
+            ?: throw CustomerBadRequestException("There is no customer id param found")
 }

@@ -9,15 +9,17 @@ import raidline.pt.plugins.configureRouting
 import raidline.pt.plugins.configureSerialization
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "localhost") {
-        configureSerialization()
-        configureRouting()
-        module()
-    }.start(wait = true)
+    embeddedServer(Netty, port = 8080, host = "localhost", module = Application::customerModule).start(wait = true)
 }
 
 fun Application.module() {
     install(StatusPages) {
         setup()
     }
+}
+
+fun Application.customerModule() {
+    configureSerialization()
+    configureRouting()
+    module()
 }
